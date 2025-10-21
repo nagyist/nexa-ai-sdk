@@ -162,14 +162,25 @@ def handle_function_call(func_name: str, func_args: dict, model: str, endpoint: 
 
     tool_result = FUNCTION_REGISTRY[func_name](**func_args)
 
+    # Modified prompt with formatting instructions using dash bullet points
     user_followup_prompt = f"""
     You previously decided to call the function `{func_name}` with arguments {func_args}.
     Here is the result returned by that function:
 
     {tool_result}
 
-    Now, based on this result, please summarize and respond naturally to the user.
-    Do NOT call any function again.
+    Now, based on this result, please provide a concise summary in the following format:
+    - Use bullet points starting with dash (-) for each key finding
+    - Keep each bullet point brief and informative (1-2 sentences max)
+    - Highlight the most important or relevant information
+    - Limit to 3-5 main points
+    - Do NOT call any function again
+    - Do NOT add extra commentary or explanations
+    
+    Format example:
+    - First key point here
+    - Second key point here
+    - Third key point here
     """
 
     try:
